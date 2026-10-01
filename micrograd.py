@@ -60,7 +60,7 @@ class Value:
         assert isinstance(other, (float, int))
         out = Value(self.data ** other, op='pow', ch=(self,))
         def _backward():
-            self.grad += (other * self ** (other - 1)) * out.grad 
+            self.grad += (other * self.data ** (other - 1)) * out.grad 
 
         out._backward = _backward
         return out
@@ -106,6 +106,7 @@ class Value:
 
         _get_topo_order(self)
 
+        self.grad = 1
         for node in reversed(topo):
             node._backward()
             
